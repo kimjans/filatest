@@ -12,6 +12,18 @@ var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
 
+var _index = require('./routes/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _ejsLocals = require('ejs-locals');
+
+var _ejsLocals2 = _interopRequireDefault(_ejsLocals);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _posts = require('./routes/posts');
 
 var _posts2 = _interopRequireDefault(_posts);
@@ -32,7 +44,14 @@ if (process.env.NODE_ENV == 'development') {
     console.log('webpack-dev-server is listening on port', devPort);
   });
 }
-app.use('/', _express2.default.static(__dirname + '/../public'));
+
+app.set('views', _path2.default.join(__dirname, '../views'));
+app.engine('ejs', _ejsLocals2.default);
+app.set('view engine', 'ejs');
+
+app.use(_express2.default.static(_path2.default.join(__dirname, '../public')));
+
+app.use('/', _index2.default);
 
 app.get('/hello', function (req, res) {
   return res.send('Can you hear me?');

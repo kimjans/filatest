@@ -1,6 +1,9 @@
 import express from 'express';
 import WebpackDevServer from 'webpack-dev-server';
 import webpack from 'webpack';
+import router from './routes/index';
+import engine from "ejs-locals";
+import path from "path";
  
 const app = express();
 const port = 3000;
@@ -17,7 +20,14 @@ if(process.env.NODE_ENV == 'development') {
         console.log('webpack-dev-server is listening on port', devPort);
     });
 }
-app.use('/', express.static(__dirname + '/../public'));
+
+app.set('views', path.join(__dirname, '../views'));
+app.engine('ejs', engine);
+app.set('view engine', 'ejs');
+
+app.use(express.static(path.join(__dirname, '../public')));
+
+app.use('/', router);
  
 app.get('/hello', (req, res) => {
     return res.send('Can you hear me?');
